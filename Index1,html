@@ -1,18 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veracruz: Restauración de un Paraíso Perdido</title>
+    <title>Veracruz: Restauración de un Paraíso Perdido - Versión Educativa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Energetic & Playful -->
-    <!-- Application Structure Plan: The SPA is structured as a top-to-bottom narrative scroll. It begins with a hook (Hero), introduces the stakes (Biodiversity), details the problem with data (Crisis & Deforestation Chart), presents the solution (Restoration ROI), shows proof of concept (Case Studies), and ends with a call to action (Conclusion). This linear storytelling approach is designed to build an emotional and intellectual case for restoration, making complex information digestible and persuasive for a general audience. -->
-    <!-- Visualization & Content Choices: 1. Biodiversity Overview: Goal: Inform. Method: Icon cards (Unicode + Tailwind). Justification: Quickly conveys the range of ecosystems. 2. Key Crisis Stats: Goal: Inform. Method: Big numbers. Justification: High impact for critical data points like species extinction. 3. Deforestation Hotspots: Goal: Compare/Analyze. Method: Bar Chart (Chart.js). Justification: Best for comparing hair loss across municipalities and identifying key problem areas. Includes required label wrapping and tooltip config. 4. Restoration ROI: Goal: Persuade. Method: Animated number counters (JS). Justification: Dynamically illustrates the powerful economic argument for restoration. 5. Process Flow: Goal: Organize. Method: Numbered list with styled HTML/Tailwind. Justification: Clearly presents the strategic recommendations in a step-by-step format. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -59,23 +56,226 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Educational Features Styles */
+        .learning-objectives {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F3E5F5 100%);
+            border-left: 5px solid #00B2A9;
+            border-radius: 0.5rem;
+        }
+        
+        .vocab-tooltip {
+            position: relative;
+            border-bottom: 2px dotted #00B2A9;
+            cursor: help;
+            font-weight: 500;
+        }
+        
+        .vocab-definition {
+            position: absolute;
+            background: #212529;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            z-index: 10;
+            white-space: nowrap;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-weight: 400;
+        }
+        
+        .vocab-tooltip:hover .vocab-definition {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 5px solid #FFC425;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+        
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #e9ecef;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .quiz-option:hover {
+            border-color: #00B2A9;
+            background: #f0fffe;
+        }
+        
+        .quiz-option.selected {
+            border-color: #00B2A9;
+            background: #e0f7f6;
+        }
+        
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+        
+        .quiz-feedback.show {
+            display: block;
+        }
+        
+        .feedback-correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback-incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .discussion-prompt {
+            background: #FFF3CD;
+            border-left: 5px solid #FF9800;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .discussion-prompt h5 {
+            color: #FF9800;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .discussion-prompt p {
+            color: #7d6608;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-tracker {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00B2A9, #00A3E0);
+            transition: width 0.3s ease;
+        }
+        
+        .teacher-resources {
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+            border-left: 5px solid #4CAF50;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .teacher-resources h4 {
+            color: #2E7D32;
+            margin-bottom: 1rem;
+        }
+        
+        .teacher-toggle {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .teacher-toggle:hover {
+            background: #2E7D32;
+        }
+        
+        .teacher-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .teacher-content.open {
+            max-height: 1000px;
+        }
+        
+        .achievement-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+        }
     </style>
 </head>
 <body class="antialiased">
 
     <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-[#006A4E]">Veracruz Resiliente</h1>
+            <div>
+                <h1 class="text-2xl font-bold text-[#006A4E]">Veracruz Resiliente</h1>
+                <p class="text-sm text-gray-500">Versión Educativa</p>
+            </div>
             <div class="hidden md:flex space-x-6 text-gray-700 font-medium">
+                <a href="#objetivos" class="hover:text-[#00B2A9] transition-colors">Objetivos</a>
                 <a href="#crisis" class="hover:text-[#00B2A9] transition-colors">La Crisis</a>
                 <a href="#datos" class="hover:text-[#00B2A9] transition-colors">Los Datos</a>
                 <a href="#solucion" class="hover:text-[#00B2A9] transition-colors">La Solución</a>
-                <a href="#accion" class="hover:text-[#00B2A9] transition-colors">Acción</a>
+                <a href="#maestro" class="hover:text-[#00B2A9] transition-colors">Para Docentes</a>
             </div>
         </nav>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero-bg text-white py-20 md:py-32">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Un Tapiz de Vida Deshilachado</h2>
@@ -83,13 +283,57 @@
             </div>
         </section>
 
+        <!-- Learning Objectives -->
+        <section id="objetivos" class="py-16 md:py-20">
+            <div class="container mx-auto px-6">
+                <div class="learning-objectives p-8 rounded-lg max-w-4xl mx-auto">
+                    <h3 class="text-2xl font-bold text-[#006A4E] mb-6">📚 Objetivos de Aprendizaje</h3>
+                    <p class="text-gray-700 mb-4">Al completar esta lección, podrás:</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-[#00B2A9] font-bold mr-3">✓</span>
+                            <span>Identificar los ecosistemas clave de Veracruz y su importancia para la biodiversidad global</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#00B2A9] font-bold mr-3">✓</span>
+                            <span>Analizar datos de deforestación para entender las causas y patrones de pérdida ambiental</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#00B2A9] font-bold mr-3">✓</span>
+                            <span>Explicar cómo la restauración ecológica genera beneficios económicos y ambientales simultáneamente</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#00B2A9] font-bold mr-3">✓</span>
+                            <span>Desarrollar acciones concretas que puedas tomar en tu comunidad para apoyar la restauración</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Tracker -->
+        <section class="py-4 bg-gray-50">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="progress-tracker">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-sm font-semibold text-gray-700">Progreso en tu aprendizaje</label>
+                        <span class="text-sm text-gray-600"><span id="progress-percent">0</span>% completado</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Biodiversity Section with Vocabulary -->
         <section id="intro" class="py-16 md:py-20">
             <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-[#006A4E] mb-4">De Glaciares a Arrecifes</h3>
-                    <p class="text-lg text-gray-600 mb-12">La geografía única de Veracruz ha creado una cadena de ecosistemas interconectados, desde las cumbres heladas hasta la costa tropical. Esta riqueza es también su mayor vulnerabilidad.</p>
+                    <p class="text-lg text-gray-600 mb-4">La geografía única de Veracruz ha creado una cadena de <span class="vocab-tooltip">ecosistemas<span class="vocab-definition">Comunidades de seres vivos que interactúan con su ambiente físico</span></span> interconectados, desde las cumbres heladas hasta la costa tropical. Esta riqueza es también su mayor vulnerabilidad.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                     <div class="stat-card border-t-[#00A3E0]">
                         <span class="text-5xl">🏔️</span>
                         <h4 class="text-xl font-bold mt-4 mb-2">Bosques de Niebla</h4>
@@ -111,16 +355,38 @@
                         <p class="text-gray-600">Fragmentados en más de 814 parches, estos escudos naturales están siendo "exprimidos" entre la urbanización y el mar.</p>
                     </div>
                 </div>
+
+                <!-- Quiz 1: Biodiversity -->
+                <div class="quiz-container max-w-3xl mx-auto">
+                    <div class="quiz-question">❓ Quiz: ¿Cuál de los siguientes ecosistemas es conocido como "fábrica de agua"?</div>
+                    <div class="quiz-options" data-quiz="1">
+                        <div class="quiz-option" data-answer="false">Manglares y Costas</div>
+                        <div class="quiz-option" data-answer="true">Bosques de Niebla</div>
+                        <div class="quiz-option" data-answer="false">Selva Alta Perennifolia</div>
+                        <div class="quiz-option" data-answer="false">Ríos y Humedales</div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-1">
+                        <strong>✓ ¡Correcto!</strong> Los bosques de niebla actúan como "fábricas de agua" porque capturan la humedad del aire.
+                    </div>
+                </div>
+
+                <!-- Discussion Prompt 1 -->
+                <div class="discussion-prompt max-w-3xl mx-auto">
+                    <h5>💬 Pregunta para Reflexionar</h5>
+                    <p><strong>¿Por qué crees que los ecosistemas conectados (desde montañas hasta costa) son más vulnerables que los aislados?</strong></p>
+                    <p class="text-sm mt-2">Pista: Piensa en cómo el agua, la vida silvestre y los nutrientes se mueven de un lugar a otro.</p>
+                </div>
             </div>
         </section>
 
+        <!-- Crisis Section -->
         <section id="crisis" class="py-16 md:py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-[#006A4E] mb-4">El Gran Desmoronamiento</h3>
-                    <p class="text-lg text-gray-600 mb-12">Un asedio implacable de deforestación, contaminación y cambio climático está llevando a los ecosistemas y especies de Veracruz a un punto de no retorno. Las cifras revelan la magnitud de la crisis.</p>
+                    <p class="text-lg text-gray-600 mb-4">Un asedio implacable de <span class="vocab-tooltip">deforestación<span class="vocab-definition">Pérdida de bosques por tala, quema o conversión a otros usos de tierra</span></span>, contaminación y cambio climático está llevando a los ecosistemas y especies de Veracruz a un punto de no retorno. Las cifras revelan la magnitud de la crisis.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
                     <div class="stat-card">
                         <p class="text-5xl md:text-6xl font-extrabold text-[#00B2A9]">541,000</p>
                         <h4 class="text-xl font-bold mt-4">Hectáreas Perdidas</h4>
@@ -134,34 +400,57 @@
                     <div class="stat-card">
                         <p class="text-5xl md:text-6xl font-extrabold text-[#D22630]">37</p>
                         <h4 class="text-xl font-bold mt-4">Especies en Peligro Crítico</h4>
-                        <p class="text-gray-600 mt-2">Animales endémicos, que solo existen en Veracruz, están al borde de la extinción.</p>
+                        <p class="text-gray-600 mt-2">Animales <span class="vocab-tooltip">endémicos<span class="vocab-definition">Que existen naturalmente en una sola región del mundo</span></span>, que solo existen en Veracruz, están al borde de la extinción.</p>
+                    </div>
+                </div>
+
+                <!-- Quiz 2: Crisis Data -->
+                <div class="quiz-container max-w-3xl mx-auto">
+                    <div class="quiz-question">❓ Quiz: ¿Cuál ha sido la principal causa de la deforestación en México?</div>
+                    <div class="quiz-options" data-quiz="2">
+                        <div class="quiz-option" data-answer="false">Urbanización y construcción</div>
+                        <div class="quiz-option" data-answer="true">Conversión de tierras para ganadería (pastizales)</div>
+                        <div class="quiz-option" data-answer="false">Explotación maderera comercial</div>
+                        <div class="quiz-option" data-answer="false">Incendios naturales</div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-2">
+                        <strong>✓ ¡Correcto!</strong> El 73% de la deforestación en México se debe a la conversión de bosques en pastizales para ganadería.
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Data Section -->
         <section id="datos" class="py-16 md:py-20">
             <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-[#006A4E] mb-4">Anatomía de la Deforestación</h3>
-                    <p class="text-lg text-gray-600 mb-12">Los datos satelitales de Global Forest Watch (2001-2024) identifican los "puntos calientes" de la pérdida de cobertura arbórea. El sur del estado concentra la mayor parte de la destrucción, impulsada por la expansión de la frontera ganadera.</p>
+                    <p class="text-lg text-gray-600 mb-4">Los datos satelitales de Global Forest Watch (2001-2024) identifican los "puntos calientes" de la pérdida de cobertura arbórea. El sur del estado concentra la mayor parte de la destrucción, impulsada por la expansión de la frontera ganadera.</p>
                 </div>
-                <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-8">
                     <h4 class="text-xl font-semibold text-center mb-4">Pérdida de Cobertura Arbórea por Municipio (miles de ha)</h4>
                     <div class="chart-container">
                         <canvas id="deforestationChart"></canvas>
                     </div>
                 </div>
+
+                <!-- Discussion Prompt 2 -->
+                <div class="discussion-prompt max-w-3xl mx-auto">
+                    <h5>💬 Análisis de Datos</h5>
+                    <p><strong>Observa el gráfico: ¿Qué municipio ha experimentado la mayor pérdida de cobertura arbórea? ¿Qué crees que podría estar ocurriendo allí específicamente?</strong></p>
+                    <p class="text-sm mt-2">Pista: Busca patrones: ¿Están todos en el norte, sur, este u oeste? ¿Qué industrias podrían estar operando en esas áreas?</p>
+                </div>
             </div>
         </section>
 
+        <!-- Solution Section -->
         <section id="solucion" class="py-16 md:py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-[#006A4E] mb-4">La Arquitectura de la Recuperación</h3>
-                    <p class="text-lg text-gray-600 mb-12">La restauración ecológica es un nuevo paradigma que va más allá de conservar; busca reconstruir. Es una de las inversiones más rentables, generando beneficios económicos, ambientales y sociales simultáneamente.</p>
+                    <p class="text-lg text-gray-600 mb-4">La <span class="vocab-tooltip">restauración ecológica<span class="vocab-definition">Proceso de ayudar a recuperar ecosistemas dañados para restaurar su función y biodiversidad</span></span> es un nuevo paradigma que va más allá de conservar; busca reconstruir. Es una de las inversiones más rentables, generando beneficios económicos, ambientales y sociales simultáneamente.</p>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-8 md:p-12 grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto shadow-lg">
+                <div class="bg-gray-50 rounded-lg p-8 md:p-12 grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto shadow-lg mb-12">
                     <div class="text-center md:text-left">
                         <h4 class="text-2xl md:text-3xl font-bold mb-2">El Dividendo de la Naturaleza</h4>
                         <p class="text-gray-700">Por cada dólar invertido en la restauración de bosques, se genera un retorno masivo para las comunidades locales y la sociedad en general.</p>
@@ -174,16 +463,46 @@
                         <p class="text-gray-600 font-medium">en beneficios económicos.</p>
                     </div>
                 </div>
+
+                <!-- Quiz 3: ROI Understanding -->
+                <div class="quiz-container max-w-3xl mx-auto mb-12">
+                    <div class="quiz-question">❓ Quiz: Si un municipio invierte $10 millones en restauración forestal, ¿cuál sería el retorno económico esperado (en el mejor de los casos)?</div>
+                    <div class="quiz-options" data-quiz="3">
+                        <div class="quiz-option" data-answer="false">$15 millones a $20 millones</div>
+                        <div class="quiz-option" data-answer="true">$70 millones a $300 millones</div>
+                        <div class="quiz-option" data-answer="false">$30 millones a $50 millones</div>
+                        <div class="quiz-option" data-answer="false">$100 millones a $150 millones</div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-3">
+                        <strong>✓ ¡Correcto!</strong> Con un ROI de $7-$30 por dólar invertido, una inversión de $10 millones podría generar $70-$300 millones en beneficios. ¡Ese es un retorno fenomenal!
+                    </div>
+                </div>
+
+                <!-- Decision Challenge -->
+                <div class="bg-blue-50 border-l-5 border-[#00A3E0] rounded-lg p-8 max-w-3xl mx-auto mb-12">
+                    <h4 class="text-xl font-bold text-[#006A4E] mb-4">🎯 Desafío de Decisión</h4>
+                    <p class="text-gray-700 mb-4">Imaginemos que eres un funcionario municipal con $5 millones para invertir. Debes elegir entre:</p>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-white rounded border-l-4 border-[#E87722]">
+                            <strong>Opción A:</strong> Construir una carretera que generará turismo a corto plazo ($2M beneficios)
+                        </div>
+                        <div class="p-3 bg-white rounded border-l-4 border-[#00B2A9]">
+                            <strong>Opción B:</strong> Restaurar 500 hectáreas de bosque ($17.5M-$150M beneficios a largo plazo)
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4 italic">¿Cuál elegirías y por qué? Considera beneficios económicos, ambientales y sociales.</p>
+                </div>
             </div>
         </section>
 
+        <!-- Action Section -->
         <section id="accion" class="py-16 md:py-20">
             <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-[#006A4E] mb-4">Un Plan Maestro para un Veracruz Resiliente</h3>
-                    <p class="text-lg text-gray-600 mb-12">Los casos de éxito demuestran que la recuperación es posible. Una estrategia de inversión debe enfocarse en acciones clave para escalar estos éxitos.</p>
+                    <p class="text-lg text-gray-600 mb-4">Los casos de éxito demuestran que la recuperación es posible. Una estrategia de inversión debe enfocarse en acciones clave para escalar estos éxitos.</p>
                 </div>
-                <div class="max-w-4xl mx-auto space-y-8">
+                <div class="max-w-4xl mx-auto space-y-8 mb-12">
                     <div class="flex items-start space-x-6">
                         <div class="flex-shrink-0 bg-[#00B2A9] text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">1</div>
                         <div>
@@ -206,26 +525,115 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-20 bg-white p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
-                    <h3 class="text-2xl md:text-3xl font-bold text-[#006A4E] mb-6 text-center">✨ Descubre Tu Rol en la Restauración</h3>
-                    <div class="flex flex-col md:flex-row gap-4 items-center justify-center">
-                        <select id="role-selector" class="w-full md:w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00B2A9] focus:outline-none">
-                            <option value="">-- Selecciona tu rol --</option>
-                            <option value="Estudiante">Estudiante</option>
-                            <option value="Agricultor/a">Agricultor/a</option>
-                            <option value="Turista">Turista</option>
-                            <option value="Residente Urbano/a">Residente Urbano/a</option>
-                        </select>
-                        <button id="generate-action-btn" class="w-full md:w-auto bg-[#00B2A9] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#008a82] transition-colors disabled:bg-gray-400">
-                            Generar Mis Acciones
-                        </button>
+
+                <!-- Quiz 4: Strategic Understanding -->
+                <div class="quiz-container max-w-3xl mx-auto mb-12">
+                    <div class="quiz-question">❓ Quiz: ¿Por qué es importante crear "corredores de restauración" que conecten montañas con costas?</div>
+                    <div class="quiz-options" data-quiz="4">
+                        <div class="quiz-option" data-answer="false">Para facilitar el transporte de personas</div>
+                        <div class="quiz-option" data-answer="true">Porque los ecosistemas están interconectados y la salud de unos depende de otros</div>
+                        <div class="quiz-option" data-answer="false">Para aumentar el valor del terreno</div>
+                        <div class="quiz-option" data-answer="false">Para crear más áreas de recreación</div>
                     </div>
-                    <div id="gemini-response-container" class="mt-6 p-6 bg-gray-50 rounded-lg min-h-[150px] text-left">
-                        <p class="text-gray-500 text-center">Tus acciones personalizadas aparecerán aquí...</p>
+                    <div class="quiz-feedback" id="feedback-4">
+                        <strong>✓ ¡Correcto!</strong> Los "corredores" permiten que el agua, la vida silvestre y los nutrientes fluyan, manteniendo la salud integral del sistema.
                     </div>
                 </div>
+            </div>
+        </section>
 
+        <!-- Teacher Resources Section -->
+        <section id="maestro" class="py-16 md:py-20 bg-gray-50">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="teacher-resources">
+                    <h4 class="text-2xl font-bold">👨‍🏫 Recursos para Docentes</h4>
+                    <p class="text-gray-700 mb-6">Guía pedagógica, evaluaciones y actividades complementarias para sacar el máximo provecho de esta lección.</p>
+                    <button class="teacher-toggle" onclick="toggleTeacherContent()">Abrir Recursos Completos</button>
+                    
+                    <div class="teacher-content" id="teacher-content">
+                        <div class="space-y-6 mt-4">
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">📋 Duración y Nivel</h5>
+                                <p class="text-gray-700"><strong>Duración:</strong> 45-60 minutos (lectura activa)</p>
+                                <p class="text-gray-700"><strong>Nivel recomendado:</strong> Secundaria (14+), Bachillerato, Educación Superior</p>
+                                <p class="text-gray-700"><strong>Áreas:</strong> Biología, Ecología, Educación Ambiental, Sostenibilidad, Geografía</p>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">🎯 Estrategias Pedagógicas</h5>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li><strong>Aprendizaje Narrativo:</strong> La estructura "Problema-Solución-Acción" mantiene la atención y motiva el cambio.</li>
+                                    <li><strong>Visualización de Datos:</strong> Los gráficos y estadísticas desarrollan pensamiento crítico y análisis.</li>
+                                    <li><strong>Vocabulario Contextual:</strong> Las definiciones interactivas apoyan a aprendices de diferentes niveles.</li>
+                                    <li><strong>Evaluación Formativa:</strong> Los quizzes dan retroalimentación inmediata sin presión.</li>
+                                    <li><strong>Pensamiento Complejo:</strong> Los "Desafíos de Decisión" integran múltiples perspectivas (económica, ambiental, social).</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">💡 Preguntas de Discusión Amplificadas</h5>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li><strong>Pensamiento Sistémico:</strong> "¿Cómo afecta la deforestación en las montañas a las ciudades costeras de Veracruz?"</li>
+                                    <li><strong>Perspectiva Comunitaria:</strong> "¿Cuáles son los desafíos que enfrenta un agricultor ganadero que podría querer restaurar tierras?"</li>
+                                    <li><strong>Innovación:</strong> "¿Qué nuevas industrias o empleos podrían emerger de la restauración de 500,000 hectáreas?"</li>
+                                    <li><strong>Acción Personal:</strong> "Si vivieras en Veracruz, ¿qué harías como estudiante/ciudadano/profesional?"</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">📊 Rúbrica de Evaluación del Desafío de Decisión</h5>
+                                <table class="w-full text-sm">
+                                    <tr class="border-b">
+                                        <td class="py-2 font-bold">Criterio</td>
+                                        <td class="py-2 font-bold">Excelente (4)</td>
+                                        <td class="py-2 font-bold">Bueno (3)</td>
+                                        <td class="py-2 font-bold">Regular (2)</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2"><strong>Comprensión de Datos</strong></td>
+                                        <td class="py-2">Interpreta correctamente el ROI y otros datos</td>
+                                        <td class="py-2">Identifica datos clave con pequeños errores</td>
+                                        <td class="py-2">Menciona datos pero con confusiones</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-2"><strong>Pensamiento Sistémico</strong></td>
+                                        <td class="py-2">Conecta beneficios económicos, ambientales y sociales</td>
+                                        <td class="py-2">Menciona 2 de los 3 tipos de beneficios</td>
+                                        <td class="py-2">Solo menciona beneficios económicos</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2"><strong>Justificación</strong></td>
+                                        <td class="py-2">Argumento claro, bien fundamentado y defensible</td>
+                                        <td class="py-2">Argumento básico pero coherente</td>
+                                        <td class="py-2">Argumentación débil o incompleta</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">🔗 Extensiones y Conexiones</h5>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li><strong>Biología:</strong> Estudiar cadenas tróficas y cómo restaurar un ecosistema las restablece.</li>
+                                    <li><strong>Geografía:</strong> Analizar mapas de Veracruz: ubicar municipios, patrones de deforestación, hidrografía.</li>
+                                    <li><strong>Economía:</strong> Calcular costos-beneficios de diferentes estrategias de uso de tierra.</li>
+                                    <li><strong>Servicio Social:</strong> Investigar organizaciones locales en Veracruz que hacen restauración; escribir propuesta de proyecto.</li>
+                                    <li><strong>Tecnología:</strong> Explorar imágenes satelitales de Global Forest Watch; crear visualizaciones propias.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg">
+                                <h5 class="font-bold text-[#2E7D32] mb-3">📚 Fuentes de Información Confiables</h5>
+                                <ul class="text-gray-700 space-y-1 text-sm">
+                                    <li>Global Forest Watch: www.globalforestwatch.org</li>
+                                    <li>Comisión Nacional Forestal (CONAFOR): www.gob.mx/conafor</li>
+                                    <li>The Nature Conservancy México</li>
+                                    <li>WWF Reporte "Planeta Vivo"</li>
+                                    <li>SEMARNAT (Secretaría de Medio Ambiente y Recursos Naturales)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -233,16 +641,78 @@
     <footer class="bg-[#212529] text-white py-8">
         <div class="container mx-auto px-6 text-center text-gray-400">
             <p>&copy; 2025 Veracruz Resiliente. El momento de actuar es ahora.</p>
-            <p class="text-sm mt-2">Infografía basada en el informe "Veracruz: Un Tapiz de Vida Deshilachado".</p>
+            <p class="text-sm mt-2">Versión Educativa Mejorada - Diseñada para el aprendizaje profundo y la acción ciudadana.</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // ========== QUIZ FUNCTIONALITY ==========
+        function setupQuizzes() {
+            const quizContainers = document.querySelectorAll('.quiz-options');
+            quizContainers.forEach((container, index) => {
+                const options = container.querySelectorAll('.quiz-option');
+                const feedbackEl = document.getElementById(`feedback-${index + 1}`);
+                const quizNum = index + 1;
+
+                options.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Remove previous selections
+                        options.forEach(o => o.classList.remove('selected', 'correct', 'incorrect'));
+                        
+                        // Mark selected and check answer
+                        this.classList.add('selected');
+                        const isCorrect = this.getAttribute('data-answer') === 'true';
+                        
+                        if (isCorrect) {
+                            this.classList.add('correct');
+                            feedbackEl.classList.add('show', 'feedback-correct');
+                            updateProgress();
+                        } else {
+                            this.classList.add('incorrect');
+                            feedbackEl.classList.add('show', 'feedback-incorrect');
+                            feedbackEl.innerHTML = `<strong>✗ Intenta de nuevo.</strong> Relee la sección y considera la respuesta correcta.`;
+                        }
+                    });
+                });
+            });
+        }
+
+        // ========== PROGRESS TRACKING ==========
+        let completedQuizzes = 0;
+        const totalQuizzes = 4;
+
+        function updateProgress() {
+            completedQuizzes++;
+            const percentage = Math.round((completedQuizzes / totalQuizzes) * 100);
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-percent').textContent = percentage;
+
+            if (completedQuizzes === totalQuizzes) {
+                showAchievementBadge();
+            }
+        }
+
+        function showAchievementBadge() {
+            const badge = document.createElement('div');
+            badge.innerHTML = '<span class="achievement-badge">🏆 ¡Experto en Restauración!</span>';
+            badge.style.position = 'fixed';
+            badge.style.bottom = '20px';
+            badge.style.right = '20px';
+            badge.style.zIndex = '100';
+            badge.style.animation = 'slideIn 0.5s ease-out';
+            document.body.appendChild(badge);
+
+            setTimeout(() => {
+                badge.style.opacity = '0';
+                badge.style.transition = 'opacity 0.5s';
+                setTimeout(() => badge.remove(), 500);
+            }, 3000);
+        }
+
+        // ========== CHART SETUP ==========
+        function setupChart() {
             const wrapLabel = (label) => {
-                if (label.length <= 16) {
-                    return label;
-                }
+                if (label.length <= 16) return label;
                 const words = label.split(' ');
                 const lines = [];
                 let currentLine = '';
@@ -266,7 +736,7 @@
             };
 
             const ctx = document.getElementById('deforestationChart').getContext('2d');
-            const deforestationChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: deforestationData.labels.map(wrapLabel),
@@ -315,11 +785,7 @@
                                 title: function(tooltipItems) {
                                     const item = tooltipItems[0];
                                     let label = item.chart.data.labels[item.dataIndex];
-                                    if (Array.isArray(label)) {
-                                      return label.join(' ');
-                                    } else {
-                                      return label;
-                                    }
+                                    return Array.isArray(label) ? label.join(' ') : label;
                                 },
                                 label: function(context) {
                                     return ` ${context.dataset.label}: ${context.raw.toFixed(1)} kha`;
@@ -329,7 +795,10 @@
                     }
                 }
             });
+        }
 
+        // ========== ROI ANIMATION ==========
+        function animateROI() {
             const roiMinEl = document.getElementById('roi-min');
             const roiMaxEl = document.getElementById('roi-max');
 
@@ -360,69 +829,40 @@
             if(roiSection) {
                 observer.observe(roiSection);
             }
+        }
 
-            const generateBtn = document.getElementById('generate-action-btn');
-            const roleSelector = document.getElementById('role-selector');
-            const responseContainer = document.getElementById('gemini-response-container');
+        // ========== TEACHER RESOURCES TOGGLE ==========
+        function toggleTeacherContent() {
+            const content = document.getElementById('teacher-content');
+            const button = document.querySelector('.teacher-toggle');
+            content.classList.toggle('open');
+            button.textContent = content.classList.contains('open') 
+                ? 'Cerrar Recursos' 
+                : 'Abrir Recursos Completos';
+        }
 
-            generateBtn.addEventListener('click', async () => {
-                const selectedRole = roleSelector.value;
-                if (!selectedRole) {
-                    responseContainer.innerHTML = '<p class="text-red-500 text-center">Por favor, selecciona un rol primero.</p>';
-                    return;
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            setupQuizzes();
+            setupChart();
+            animateROI();
+        });
+
+        // Add CSS animation for badge
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
                 }
-
-                generateBtn.disabled = true;
-                responseContainer.innerHTML = '<div class="loader"></div>';
-
-                const prompt = `Actúa como un experto en conservación y ecología de Veracruz, México. Basado en los problemas ecológicos clave de Veracruz (deforestación para ganadería, contaminación de ríos como el Coatzacoalcos, y pérdida de manglares), genera una lista de 3 acciones concretas, prácticas y de alto impacto que un "${selectedRole}" puede tomar para ayudar en la restauración ecológica. Usa un tono positivo y motivador. Formatea la respuesta en HTML usando un h4 para cada acción y un párrafo p para la descripción. No incluyas nada antes de la primera etiqueta h4 ni después de la última etiqueta p.`;
-
-                try {
-                    const text = await callGemini(prompt);
-                    responseContainer.innerHTML = text;
-                } catch (error) {
-                    responseContainer.innerHTML = `<p class="text-red-500 text-center">Lo sentimos, ocurrió un error al generar las acciones. Por favor, intenta de nuevo más tarde.</p>`;
-                } finally {
-                    generateBtn.disabled = false;
-                }
-            });
-
-            async function callGemini(prompt, retries = 3, delay = 1000) {
-                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-                const payload = { contents: chatHistory };
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-
-                        const result = await response.json();
-                        
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            return result.candidates[0].content.parts[0].text;
-                        } else {
-                            throw new Error('Respuesta inesperada de la API.');
-                        }
-                    } catch (error) {
-                        if (i === retries - 1) {
-                            throw error;
-                        }
-                        await new Promise(res => setTimeout(res, delay * Math.pow(2, i)));
-                    }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
                 }
             }
-        });
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
